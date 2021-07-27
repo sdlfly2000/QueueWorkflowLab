@@ -1,6 +1,6 @@
 ﻿namespace QueueSocket
 {
-    public interface IQueueManager<T>
+    public interface IQueueService<T>
     {
         void PushToQueue(T number);
 

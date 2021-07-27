@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Common.Core.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -19,6 +17,12 @@ namespace QueueWorkflow
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    services.AddMemoryCache();
+                    DIModule.RegisterDomain(services, new List<string>
+                    {
+                        "QueueSocket",
+                        "QueueWorkflow"
+                    });
                 });
     }
 }

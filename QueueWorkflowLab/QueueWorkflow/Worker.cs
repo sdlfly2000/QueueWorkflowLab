@@ -1,29 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using QueueSocket;
 
 namespace QueueWorkflow
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly ISocketService _socketService;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(
+            ILogger<Worker> logger,
+            ISocketService socketService)
         {
             _logger = logger;
+            _socketService = socketService;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
-            }
+            _socketService.Start();
+            return Task.CompletedTask;
+        }
+
+        public override Task StopAsync(CancellationToken stoppingToken)
+        {
+            _socketService.Dispose();
+            return Task.CompletedTask;
         }
     }
 }

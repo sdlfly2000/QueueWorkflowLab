@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace QueueSocket
 {
-    [ServiceLocate(typeof(IQueueManager<>))]
-    public class QueueManager : IQueueManager<int>
+    [ServiceLocate(typeof(IQueueService<int>))]
+    public class QueueService : IQueueService<int>
     {
         private static Queue<int> _queue;
 
-        public QueueManager()
+        public QueueService()
         {
             _queue = new Queue<int>();
         }
@@ -26,6 +26,11 @@ namespace QueueSocket
         public void PushToQueue(int number)
         {
             _queue.Enqueue(number);
+        }
+
+        public void ClearQueue()
+        {
+            _queue.Clear();
         }
     }
 }

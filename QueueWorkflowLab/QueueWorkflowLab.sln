@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueueWorkflow", "QueueWorkflow\QueueWorkflow.csproj", "{98938FB3-1E1D-4C07-8699-40FD39C13964}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workflow", "Workflow\Workflow.csproj", "{B13A7F91-4E0F-43A9-BEB5-A33CD8FE70C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workflow", "Workflow\Workflow.csproj", "{B13A7F91-4E0F-43A9-BEB5-A33CD8FE70C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueSocket", "QueueSocket\QueueSocket.csproj", "{AA5FC9F5-424E-45FB-BD4D-F6E2F17D2BA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueueSocket", "QueueSocket\QueueSocket.csproj", "{AA5FC9F5-424E-45FB-BD4D-F6E2F17D2BA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{EF54997A-2260-4A8A-9725-ED1196568EEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{EF54997A-2260-4A8A-9725-ED1196568EEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPServer", "TCPServer\TCPServer.csproj", "{8FF564FB-7C32-419F-A2F3-B3BCF3FE298B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EF54997A-2260-4A8A-9725-ED1196568EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF54997A-2260-4A8A-9725-ED1196568EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF54997A-2260-4A8A-9725-ED1196568EEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FF564FB-7C32-419F-A2F3-B3BCF3FE298B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FF564FB-7C32-419F-A2F3-B3BCF3FE298B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FF564FB-7C32-419F-A2F3-B3BCF3FE298B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FF564FB-7C32-419F-A2F3-B3BCF3FE298B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

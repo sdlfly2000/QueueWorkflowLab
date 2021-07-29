@@ -1,7 +1,7 @@
 ﻿using Common.Core.DependencyInjection;
 using System;
 using System.Net.Sockets;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace TCPServer
 {
@@ -11,9 +11,10 @@ namespace TCPServer
         private TcpListener _listener;
         private TcpClient _client;
 
+        private bool _state = false;
+
         public TCPServer()
         {
-            
         }
 
         public void Start(int listenPort)
@@ -21,12 +22,27 @@ namespace TCPServer
             _listener = TcpListener.Create(listenPort);
             _listener.Start();
 
-            _client = AcceptConnection().Result;
-        } 
+            ThreadPool.QueueUserWorkItem(
+                AcceptConnection,
+                _state,
+                true);
+        }
 
-        private async Task<TcpClient> AcceptConnection()
+        private void AcceptConnection(bool state)
         {
-            return await _listener.AcceptTcpClientAsync();
+            var client = _listener.AcceptTcpClient();
+            var dataStream = client.GetStream();
+            var buffer = new byte[5];
+            if (dataStream.DataAvailable)
+            {
+                var rev = dataStream.Read(buffer, 0,2);
+                Console.WriteLine($"Data Received: {rev}");
+            }
+            client.Close();
+            ThreadPool.QueueUserWorkItem(
+                AcceptConnection,
+                _state,
+                true);
         }
 
         public void Stop()
@@ -36,7 +52,7 @@ namespace TCPServer
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _listener.Stop();
         }
     }
 }

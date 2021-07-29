@@ -5,21 +5,22 @@ using System;
 
 namespace QueueSocket
 {
+    using TCPServer;
+
     [ServiceLocate(typeof(ISocketService))]
     public class SocketService : ISocketService, IDisposable
     {
         private readonly int ListenPort = 6005;
-        private readonly AsyncTCPServer _tcpServer;
+        private readonly ITCPServer _tcpServer;
 
-        public SocketService(IReceiveDataAction receiveDataAction)
+        public SocketService(ITCPServer tcpServer)
         {
-            _tcpServer = Factory.SocketBuilder(ListenPort);
-            _tcpServer.DataReceived += receiveDataAction.DataReceived;
+            _tcpServer = tcpServer;
         }
 
         public void Start()
         {
-            _tcpServer.Start();
+            _tcpServer.Start(ListenPort);
         }
 
         public void Dispose()

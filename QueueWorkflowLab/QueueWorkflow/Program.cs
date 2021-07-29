@@ -21,7 +21,8 @@ namespace QueueWorkflow
                     DIModule.RegisterDomain(services, new List<string>
                     {
                         "QueueSocket",
-                        "QueueWorkflow"
+                        "QueueWorkflow",
+                        "TCPServer"
                     });
                 });
     }

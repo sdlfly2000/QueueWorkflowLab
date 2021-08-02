@@ -1,8 +1,9 @@
-﻿namespace QueueSocket
+﻿using System;
+
+namespace QueueSocket
 {
-    public interface ISocketService
+    public interface ISocketService : IDisposable
     {
         void Start();
-        void Dispose();
     }
 }

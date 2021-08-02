@@ -8,7 +8,7 @@ namespace QueueSocket
     using TCPServer;
 
     [ServiceLocate(typeof(ISocketService))]
-    public class SocketService : ISocketService, IDisposable
+    public class SocketService : ISocketService
     {
         private readonly int ListenPort = 6005;
         private readonly ITCPServer _tcpServer;

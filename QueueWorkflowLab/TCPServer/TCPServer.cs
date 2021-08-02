@@ -9,7 +9,6 @@ namespace TCPServer
     [ServiceLocate(typeof(ITCPServer), ServiceType.Singleton)]
     public class TCPServer : ITCPServer, IDisposable
     {
-        private object _syncListner = new object();
         private volatile TcpListener _listener;
 
         public TCPServer()
@@ -20,8 +19,7 @@ namespace TCPServer
         {
             _listener = TcpListener.Create(listenPort);
             _listener.Start();
-            StartMonitor();
-            //Task.Run(StartMonitor);
+            Task.Run(StartMonitor);
         }
 
         private void StartMonitor()
@@ -30,14 +28,20 @@ namespace TCPServer
             Console.WriteLine($"Thread: {Thread.CurrentThread.ManagedThreadId}");
             Console.WriteLine($"Listener: {_listener.GetHashCode()}");
 
-            while(true)
+            try
             {
                 var client = _listener.AcceptTcpClient();
                 Console.WriteLine($"client: {client.GetHashCode()}");
                 HandleAcceptedClient(client);
-                client.Close();                
+                client.Client.Send(new byte[] { 0x10 });
             }
-        }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Stop with {e.Message}");
+            }
+
+            Task.Run(StartMonitor);
+            }
 
         private void HandleAcceptedClient(TcpClient client)
         {
@@ -46,7 +50,7 @@ namespace TCPServer
             var buffer = new byte[dataSize];
 
             if (dataSize > 0)
-            {
+            { 
                 var rev = dataStream.Read(buffer, 0, dataSize);
                 Console.WriteLine($"Data Number: {rev}");
                 Console.WriteLine($"Data Received: {buffer[0]}");                

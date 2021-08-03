@@ -1,14 +1,10 @@
 ﻿using System.Collections.Concurrent;
-using Common.Core.Cache.Client.Utils;
 using Common.Core.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TCPServer;
 using Workflow;
 
 namespace QueueSocket
 {
-    using System.Threading;
-
     [ServiceLocate(typeof(IQueueService<WorkModel>), ServiceType.Singleton)]
     public class QueueService : IQueueService<WorkModel>
     {
@@ -21,6 +17,11 @@ namespace QueueSocket
             _logger = logger;
         }
 
+        public ConcurrentQueue<WorkModel> Queue
+        {
+            get => _queue;
+        }
+        
         public WorkModel PopFromQueue()
         {
             if (_queue.TryDequeue(out var model))
@@ -29,20 +30,6 @@ namespace QueueSocket
             }
 
             return default(WorkModel);
-        }
-
-        public void OnDataReceive(object sender, WorkflowEventArgs e)
-        {
-            var workModel = new WorkModel
-            {
-                WorkName = ConvertTools.BytesToString(e.Payload)
-            };
-
-            PushToQueue(workModel);
-
-            _logger.LogInformation($"Add {workModel.WorkName}, Total Count in Queue: {_queue.Count}");
-
-            ThreadPool.QueueUserWorkItem(ConsumeWork);
         }
 
         public void PushToQueue(WorkModel model)

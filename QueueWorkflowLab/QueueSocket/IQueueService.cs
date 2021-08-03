@@ -1,4 +1,5 @@
-﻿using TCPServer;
+﻿using System.Collections.Concurrent;
+using Workflow;
 
 namespace QueueSocket
 {
@@ -8,8 +9,8 @@ namespace QueueSocket
 
         T PopFromQueue();
 
-        void OnDataReceive(object sender, WorkflowEventArgs e);
-
         void ConsumeWork(object state);
+
+        ConcurrentQueue<WorkModel> Queue { get; }
     }
 }

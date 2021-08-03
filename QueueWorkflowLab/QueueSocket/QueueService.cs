@@ -1,31 +1,51 @@
-﻿using Common.Core.DependencyInjection;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using Common.Core.Cache.Client.Utils;
+using Common.Core.DependencyInjection;
+using TCPServer;
+using Workflow;
+using Microsoft.Extensions.Logging;
 
 namespace QueueSocket
 {
-    [ServiceLocate(typeof(IQueueService<int>))]
-    public class QueueService : IQueueService<int>
-    {
-        private static Queue<int> _queue;
+    using System.Linq;
 
-        public QueueService()
+    [ServiceLocate(typeof(IQueueService<WorkModel>), ServiceType.Singleton)]
+    public class QueueService : IQueueService<WorkModel>
+    {
+        private static ConcurrentQueue<WorkModel> _queue;
+        private static ILogger<QueueService> _logger;
+
+        public QueueService(ILogger<QueueService> logger)
         {
-            _queue = new Queue<int>();
+            _queue = new ConcurrentQueue<WorkModel>();
+            _logger = logger;
         }
 
-        public int PopFromQueue()
+        public WorkModel PopFromQueue()
         {
-            if (_queue.TryDequeue(out int ret))
+            if (_queue.TryDequeue(out var model))
             {
-                return ret;
+                return model;
             }
 
-            return -1;
+            return default(WorkModel);
         }
 
-        public void PushToQueue(int number)
+        public void OnDataReceive(object sender, WorkflowEventArgs e)
         {
-            _queue.Enqueue(number);
+            var workModel = new WorkModel
+            {
+                WorkName = ConvertTools.BytesToString(e.Payload)
+            };
+
+            PushToQueue(workModel);
+
+            _logger.LogInformation($"Total Count in Queue: {_queue.Count()}");
+        }
+
+        public void PushToQueue(WorkModel model)
+        {
+            _queue.Enqueue(model);
         }
 
         public void ClearQueue()

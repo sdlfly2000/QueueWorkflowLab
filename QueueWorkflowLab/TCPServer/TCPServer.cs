@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Common.Core.Cache.Client.Utils;
 using Common.Core.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Workflow;
 
 namespace TCPServer
 {
@@ -12,10 +11,12 @@ namespace TCPServer
     public class TCPServer : ITCPServer
     {
         private volatile TcpListener _listener;
-
         private readonly ILogger<TCPServer> _logger;
 
-        public TCPServer(ILogger<TCPServer> logger)
+        private EventHandler<WorkflowEventArgs> RaiseDataReceiveEventHandler;
+
+        public TCPServer(
+            ILogger<TCPServer> logger)
         {
             _logger = logger;
         }
@@ -55,8 +56,12 @@ namespace TCPServer
 
             if (dataSize > 0)
             { 
-                var rev = dataStream.Read(buffer, 0, dataSize);
-                var model = ParseModel(buffer, rev);
+                _ = dataStream.Read(buffer, 0, dataSize);
+                RaiseDataReceiveEventHandler(this, new WorkflowEventArgs
+                {
+                    Payload = buffer
+                });
+
                 _logger.LogInformation($"Data Received.");
             }
             else
@@ -65,19 +70,9 @@ namespace TCPServer
             }
         }
 
-        private WorkModel ParseModel(byte[] buffer, int recvCount)
+        public void SetupDataReceiveEventHandler(EventHandler<WorkflowEventArgs> eventHandler)
         {
-            if (recvCount <= 0)
-            {
-                return new WorkModel();
-            }
-
-            var workNameBuffer = new Span<byte>(buffer, 0, recvCount);
-
-            return new WorkModel
-            {
-                WorkName = ConvertTools.BytesToString(workNameBuffer.ToArray())
-            };
+            RaiseDataReceiveEventHandler += eventHandler;
         }
 
         public void Stop()
@@ -89,9 +84,8 @@ namespace TCPServer
             }
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            Stop();
             _listener = null;
         }
     }

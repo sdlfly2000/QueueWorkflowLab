@@ -1,32 +1,30 @@
-﻿using Common.Core.DependencyInjection;
-using System;
+﻿using System;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
+using Common.Core.Cache.Client.Utils;
+using Common.Core.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Workflow;
 
 namespace TCPServer
 {
-    using System.Linq;
-    using System.Text;
-
-    using Common.Core.Cache.Client.Utils;
-
-    using Microsoft.Extensions.Primitives;
-
     [ServiceLocate(typeof(ITCPServer), ServiceType.Singleton)]
     public class TCPServer : ITCPServer
     {
         private volatile TcpListener _listener;
 
-        public TCPServer()
+        private readonly ILogger<TCPServer> _logger;
+
+        public TCPServer(ILogger<TCPServer> logger)
         {
+            _logger = logger;
         }
 
         public void Start(int listenPort)
         {
             _listener = TcpListener.Create(listenPort);
             _listener.Start();
+            _logger.LogInformation($"Start to listen on port: {listenPort}");
             Task.Run(StartMonitor);
         }
 
@@ -34,17 +32,20 @@ namespace TCPServer
         {
             try
             {
+                _logger.LogInformation($"Pending on accept client.");
                 var client = _listener.AcceptTcpClient();
+                
                 HandleAcceptedClient(client);
+
                 client.Client.Send(new byte[] { 0x10 });
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Stop with Error Message: {e.Message}");
+                _logger.LogError(e.Message);
             }
 
             Task.Run(StartMonitor);
-            }
+        }
 
         private void HandleAcceptedClient(TcpClient client)
         {
@@ -56,12 +57,11 @@ namespace TCPServer
             { 
                 var rev = dataStream.Read(buffer, 0, dataSize);
                 var model = ParseModel(buffer, rev);
-
-                Console.WriteLine($"Data Received: {model.WorkName}");                
+                _logger.LogInformation($"Data Received.");
             }
             else
             {
-                Console.WriteLine("Data not Available");
+                _logger.LogInformation($"Data not Available.");
             }
         }
 
@@ -84,6 +84,7 @@ namespace TCPServer
         {
             if (_listener != null)
             {
+                _logger.LogInformation($"Listener stops.");
                 _listener.Stop();
             }
         }

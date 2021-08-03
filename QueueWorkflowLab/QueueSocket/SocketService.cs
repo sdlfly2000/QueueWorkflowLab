@@ -5,6 +5,8 @@ using Workflow;
 
 namespace QueueSocket
 {
+    using System.Threading.Tasks;
+
     [ServiceLocate(typeof(ISocketService))]
     public class SocketService : ISocketService
     {

@@ -9,5 +9,7 @@ namespace QueueSocket
         T PopFromQueue();
 
         void OnDataReceive(object sender, WorkflowEventArgs e);
+
+        void ConsumeWork(object state);
     }
 }

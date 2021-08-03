@@ -8,7 +8,7 @@ using Workflow;
 namespace QueueSocket.Actions
 {
     [ServiceLocate(typeof(IOnDataReceivedAction))]
-    internal class OnDataReceivedAction : IOnDataReceivedAction
+    public class OnDataReceivedAction : IOnDataReceivedAction
     {
         private readonly IQueueService<WorkModel> _queueService;
         private readonly ILogger<OnDataReceivedAction> _logger;

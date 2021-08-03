@@ -2,7 +2,7 @@
 
 namespace QueueSocket.Actions
 {
-    internal interface IOnDataReceivedAction
+    public interface IOnDataReceivedAction
     {
         void OnDataReceive(object sender, WorkflowEventArgs e);
     }

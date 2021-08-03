@@ -1,32 +1,30 @@
 ﻿using System;
 using Common.Core.DependencyInjection;
+using QueueSocket.Actions;
 using TCPServer;
-using Workflow;
 
 namespace QueueSocket
 {
-    using System.Threading.Tasks;
-
     [ServiceLocate(typeof(ISocketService))]
     public class SocketService : ISocketService
     {
         private readonly int ListenPort = 6005;
 
         private readonly ITCPServer _tcpServer;
-        private readonly IQueueService<WorkModel> _queueService;
+        private readonly IOnDataReceivedAction _onDataReceivedAction;
 
         public SocketService(
             ITCPServer tcpServer,
-            IQueueService<WorkModel> queueService)
+            IOnDataReceivedAction onDataReceivedAction)
         {
             _tcpServer = tcpServer;
-            _queueService = queueService;
+            _onDataReceivedAction = onDataReceivedAction;
         }
 
         public void Start()
         {
             _tcpServer.Start(ListenPort);
-            _tcpServer.SetupDataReceiveEventHandler(_queueService.OnDataReceive);
+            _tcpServer.SetupDataReceiveEventHandler(_onDataReceivedAction.OnDataReceive);
         }
 
         public void Stop()

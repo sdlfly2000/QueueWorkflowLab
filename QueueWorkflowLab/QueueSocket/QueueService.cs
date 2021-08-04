@@ -5,34 +5,34 @@ using Workflow;
 
 namespace QueueSocket
 {
-    [ServiceLocate(typeof(IQueueService<WorkModel>), ServiceType.Singleton)]
-    public class QueueService : IQueueService<WorkModel>
+    [ServiceLocate(typeof(IQueueService<GetDiscountWorkflowRequest>), ServiceType.Singleton)]
+    public class QueueService : IQueueService<GetDiscountWorkflowRequest>
     {
-        private static ConcurrentQueue<WorkModel> _queue;
+        private static ConcurrentQueue<GetDiscountWorkflowRequest> _queue;
         private static ILogger<QueueService> _logger;
 
         public QueueService(ILogger<QueueService> logger)
         {
-            _queue = new ConcurrentQueue<WorkModel>();
+            _queue = new ConcurrentQueue<GetDiscountWorkflowRequest>();
             _logger = logger;
         }
 
-        public ConcurrentQueue<WorkModel> Queue
+        public ConcurrentQueue<GetDiscountWorkflowRequest> Queue
         {
             get => _queue;
         }
         
-        public WorkModel PopFromQueue()
+        public GetDiscountWorkflowRequest PopFromQueue()
         {
             if (_queue.TryDequeue(out var model))
             {
                 return model;
             }
 
-            return default(WorkModel);
+            return default(GetDiscountWorkflowRequest);
         }
 
-        public void PushToQueue(WorkModel model)
+        public void PushToQueue(GetDiscountWorkflowRequest model)
         {
             _queue.Enqueue(model);
         }
@@ -43,7 +43,7 @@ namespace QueueSocket
             {
                 var workContext = PopFromQueue();
 
-                if (workContext != default(WorkModel))
+                if (workContext != default(GetDiscountWorkflowRequest))
                 {
                     _logger.LogInformation($"Consumed {workContext.WorkName}, Total Count in Queue: {_queue.Count}");
                 }

@@ -11,6 +11,6 @@ namespace QueueSocket
 
         void ConsumeWork(object state);
 
-        ConcurrentQueue<WorkModel> Queue { get; }
+        ConcurrentQueue<GetDiscountWorkflowRequest> Queue { get; }
     }
 }

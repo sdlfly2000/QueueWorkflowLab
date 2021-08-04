@@ -22,6 +22,7 @@ namespace QueueWorkflow
                     {
                         "QueueSocket",
                         "QueueWorkflow",
+                        "Workflow.Services",
                         "TCPServer"
                     });
                 });

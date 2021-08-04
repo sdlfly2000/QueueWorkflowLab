@@ -10,12 +10,12 @@ namespace QueueSocket.Actions
     [ServiceLocate(typeof(IOnDataReceivedAction))]
     public class OnDataReceivedAction : IOnDataReceivedAction
     {
-        private readonly IQueueService<WorkModel> _queueService;
+        private readonly IQueueService<GetDiscountWorkflowRequest> _queueService;
         private readonly ILogger<OnDataReceivedAction> _logger;
 
         public OnDataReceivedAction(
             ILogger<OnDataReceivedAction> logger,
-            IQueueService<WorkModel> queueService)
+            IQueueService<GetDiscountWorkflowRequest> queueService)
         {
             _logger = logger;
             _queueService = queueService;
@@ -23,7 +23,7 @@ namespace QueueSocket.Actions
 
         public void OnDataReceive(object sender, WorkflowEventArgs e)
         {
-            var workModel = new WorkModel
+            var workModel = new GetDiscountWorkflowRequest
             {
                 WorkName = ConvertTools.BytesToString(e.Payload)
             };

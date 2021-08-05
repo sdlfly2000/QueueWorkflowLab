@@ -34,6 +34,7 @@ namespace QueueWorkflow
                         "QueueSocket",
                         "QueueWorkflow",
                         "Workflow.Services",
+                        "Workflow.Sql.database",
                         "TCPServer"
                     });
                 })

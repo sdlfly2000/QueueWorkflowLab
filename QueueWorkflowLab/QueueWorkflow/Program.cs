@@ -33,9 +33,10 @@ namespace QueueWorkflow
                     {
                         "QueueSocket",
                         "QueueWorkflow",
-                        "Workflow.Services",
                         "Workflow.Sql.database",
-                        "TCPServer"
+                        "TCPServer",
+                        "Workflow",
+                        "Workflow.Services"
                     });
                 })
                 .UseSystemd();

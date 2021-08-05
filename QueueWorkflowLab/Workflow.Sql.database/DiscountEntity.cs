@@ -7,5 +7,7 @@ namespace Workflow.Sql.database
     public class DiscountEntity
     {
         public string Id { get; set; }
+
+        public string RowVersion { get; set; }
     }
 }

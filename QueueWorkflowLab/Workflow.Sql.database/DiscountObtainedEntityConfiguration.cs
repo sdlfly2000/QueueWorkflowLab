@@ -12,6 +12,10 @@ namespace Workflow.Sql.database
             builder.Property(e => e.WorkflowName).HasColumnName("workflowName");
 
             builder.HasKey(e => e.Id);
+            builder
+                .HasOne(e => e.Discount)
+                .WithOne()
+                .HasForeignKey<DiscountObtainedEntity>(e => e.DiscountId);
             builder.ToTable("DiscountObtained");
         }
     }

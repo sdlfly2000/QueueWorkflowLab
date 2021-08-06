@@ -25,5 +25,10 @@ namespace Workflow.Sql.database
         {
             return Set<TEntity>();
         }
+
+        public void Save()
+        {
+            SaveChanges();
+        }
     }
 }

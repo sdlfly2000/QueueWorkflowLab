@@ -29,7 +29,9 @@ namespace Workflow.Services.DiscountWorkflow
                     Id = Guid.NewGuid().ToString(),
                     WorkflowName = context.Name,
                     DiscountId = context.DiscountId
-                }); 
+                });
+
+                scope.Complete();
             }
         }
     }

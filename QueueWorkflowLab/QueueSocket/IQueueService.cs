@@ -9,8 +9,6 @@ namespace QueueSocket
 
         T PopFromQueue();
 
-        void ConsumeWork(object state);
-
         ConcurrentQueue<GetDiscountWorkflowRequest> Queue { get; }
     }
 }

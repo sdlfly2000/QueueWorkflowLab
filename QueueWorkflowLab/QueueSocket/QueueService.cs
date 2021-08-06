@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using Common.Core.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Workflow;
 
 namespace QueueSocket
@@ -9,12 +8,10 @@ namespace QueueSocket
     public class QueueService : IQueueService<GetDiscountWorkflowRequest>
     {
         private static ConcurrentQueue<GetDiscountWorkflowRequest> _queue;
-        private static ILogger<QueueService> _logger;
 
-        public QueueService(ILogger<QueueService> logger)
+        public QueueService()
         {
             _queue = new ConcurrentQueue<GetDiscountWorkflowRequest>();
-            _logger = logger;
         }
 
         public ConcurrentQueue<GetDiscountWorkflowRequest> Queue
@@ -35,19 +32,6 @@ namespace QueueSocket
         public void PushToQueue(GetDiscountWorkflowRequest model)
         {
             _queue.Enqueue(model);
-        }
-
-        public void ConsumeWork(object state)
-        {
-            if (_queue.Count > 0)
-            {
-                var workContext = PopFromQueue();
-
-                if (workContext != default(GetDiscountWorkflowRequest))
-                {
-                    _logger.LogInformation($"Consumed {workContext.WorkName}, Total Count in Queue: {_queue.Count}");
-                }
-            }
         }
 
         public void ClearQueue()

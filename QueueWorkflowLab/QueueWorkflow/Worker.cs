@@ -1,5 +1,7 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using QueueSocket;
 
@@ -7,17 +9,23 @@ namespace QueueWorkflow
 {
     public class Worker : BackgroundService
     {
-        private readonly ISocketService _socketService;
+        private readonly IServiceProvider _services;
+        private ISocketService _socketService;
 
         public Worker(
-            ISocketService socketService)
+            IServiceProvider services)
         {
-            _socketService = socketService;
+            _services = services;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _socketService.Start();
+            using (var scope = _services.CreateScope())
+            {
+                _socketService = scope.ServiceProvider.GetRequiredService<ISocketService>();
+                _socketService.Start();
+            }
+                
         }
 
         public override async Task StopAsync(CancellationToken stoppingToken)

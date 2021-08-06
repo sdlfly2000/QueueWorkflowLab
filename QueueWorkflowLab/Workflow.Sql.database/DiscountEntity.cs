@@ -8,6 +8,8 @@ namespace Workflow.Sql.database
     {
         public string Id { get; set; }
 
+        public bool IsOccupied { get; set; }
+
         public string RowVersion { get; set; }
     }
 }

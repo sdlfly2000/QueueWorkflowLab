@@ -10,6 +10,7 @@ namespace Workflow.Sql.database
             builder
                 .Property(e => e.Id).HasColumnName("discountId")
                 .IsRequired();
+            builder.Property(e => e.IsOccupied).HasColumnName("isOccupied");
             builder
                 .Property(e => e.RowVersion).HasColumnName("rowVersion").IsRowVersion();
 

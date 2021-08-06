@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Common.Core.DependencyInjection;
 
 namespace Workflow.Sql.database
 {
+    [ServiceLocate(typeof(IWorkflowDbContext), ServiceType.Scoped)]
     public class WorkflowDbContext : DbContext, IWorkflowDbContext
     {
         public WorkflowDbContext(DbContextOptions options) : base(options)
@@ -17,5 +19,11 @@ namespace Workflow.Sql.database
         public DbSet<DiscountEntity> Discounts;
 
         public DbSet<DiscountObtainedEntity> DiscountObtained;
+
+        public DbSet<TEntity> Get<TEntity>()
+            where TEntity : class
+        {
+            return Set<TEntity>();
+        }
     }
 }

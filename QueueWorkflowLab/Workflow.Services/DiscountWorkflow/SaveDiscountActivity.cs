@@ -1,19 +1,36 @@
 ﻿using Common.Core.DependencyInjection;
 using System;
+using System.Transactions;
+using Workflow.Sql.database;
 
 namespace Workflow.Services.DiscountWorkflow
 {
     [ServiceLocate(typeof(ISaveDiscountActivity))]
     public class SaveDiscountActivity : ISaveDiscountActivity
     {
-        public SaveDiscountActivity()
-        {
+        private readonly IDiscountObtainedRepository _discountObtainedRepository;
 
+        public SaveDiscountActivity(IDiscountObtainedRepository discountObtainedRepository)
+        {
+            _discountObtainedRepository = discountObtainedRepository;
         }
 
         public void Execute(GetDiscountWorkflowContext context)
         {
-            throw new NotImplementedException();
+            var option = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.ReadCommitted
+            };
+
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, option)) 
+            {
+                _discountObtainedRepository.Add(new DiscountObtainedEntity
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    WorkflowName = context.Name,
+                    DiscountId = context.DiscountId
+                }); 
+            }
         }
     }
 }

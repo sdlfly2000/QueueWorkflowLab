@@ -36,6 +36,8 @@ namespace Workflow.Services.DiscountWorkflow
                     DiscountId = context.DiscountId
                 });
 
+                _uow.OccupyDiscount(context.DiscountId);
+
                 scope.Complete();
             }
         }

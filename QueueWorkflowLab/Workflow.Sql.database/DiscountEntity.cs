@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Workflow.Sql.database
 {
@@ -10,6 +8,6 @@ namespace Workflow.Sql.database
 
         public bool IsOccupied { get; set; }
 
-        public string RowVersion { get; set; }
+        public DateTime RowVersion { get; set; }
     }
 }

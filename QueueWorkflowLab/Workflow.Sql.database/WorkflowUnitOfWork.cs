@@ -4,7 +4,7 @@ using System;
 
 namespace Workflow.Sql.database
 {
-    [ServiceLocate(typeof(IUnitOfWork))]
+    [ServiceLocate(typeof(IUnitOfWork), ServiceType.Singleton)]
     public class WorkflowUnitOfWork : IUnitOfWork
     {
         private readonly IDiscountRepository _discountRepository;
@@ -18,26 +18,34 @@ namespace Workflow.Sql.database
                 .ServiceProvider
                 .GetRequiredService<IWorkflowDbContext>();
 
+            Console.WriteLine($"Create Instance id: {_context.GetHashCode()}");
+
             _discountRepository = new DiscountRepository(_context);
             _discountObtainedRepository = new DiscountObtainedRepository(_context);
         }
 
         public void Add(DiscountObtainedEntity entity)
         {
-            Console.WriteLine($"Instance id: {_context.GetHashCode()}");
+            Console.WriteLine($"From Add DiscountObtained Instance id: {_context.GetHashCode()}");
             _discountObtainedRepository.Add(entity);
         }
 
         public DiscountEntity Load(string id)
         {
-            Console.WriteLine($"Instance id: {_context.GetHashCode()}");
+            Console.WriteLine($"Fromn Load Discount Instance id: {_context.GetHashCode()}");
             return _discountRepository.Load(id);
         }
 
         public DiscountEntity LoadAvailable()
         {
-            Console.WriteLine($"Instance id: {_context.GetHashCode()}");
+            Console.WriteLine($"From Load Available Instance id: {_context.GetHashCode()}");
             return _discountRepository.LoadAvailable();
+        }
+
+        public void OccupyDiscount(string id)
+        {
+            Console.WriteLine($"From Occupy Discount Instance id: {_context.GetHashCode()}");
+            _discountRepository.OccupyDiscount(id);
         }
 
         public void Dispose()

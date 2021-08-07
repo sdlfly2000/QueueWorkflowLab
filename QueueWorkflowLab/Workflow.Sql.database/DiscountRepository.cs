@@ -22,6 +22,14 @@ namespace Workflow.Sql.database
             return All().FirstOrDefault(e => !e.IsOccupied);
         }
 
+        public void OccupyDiscount(string id)
+        {
+            var discount = All().First(e => e.Id.Equals(id));
+            discount.IsOccupied = true;
+            _context.UpdateEntity(discount);
+            _context.Save();
+        }
+
         private IQueryable<DiscountEntity> All()
         {
             return _context.Get<DiscountEntity>().AsNoTracking().AsQueryable();

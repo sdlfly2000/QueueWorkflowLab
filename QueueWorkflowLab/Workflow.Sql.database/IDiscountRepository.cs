@@ -6,5 +6,7 @@
 
         DiscountEntity LoadAvailable();
 
+        void OccupyDiscount(string id);
+
     }
 }

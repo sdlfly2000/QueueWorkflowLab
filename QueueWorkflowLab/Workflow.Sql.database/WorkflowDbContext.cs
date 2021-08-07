@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Common.Core.DependencyInjection;
-using System;
 
 namespace Workflow.Sql.database
 {
@@ -30,6 +29,11 @@ namespace Workflow.Sql.database
         public void Save()
         {
             SaveChanges();
+        }
+
+        public void UpdateEntity<TEntity>(TEntity entity)
+        {
+            Update(entity);
         }
     }
 }

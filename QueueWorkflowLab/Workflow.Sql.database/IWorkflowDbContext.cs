@@ -8,5 +8,7 @@ namespace Workflow.Sql.database
         DbSet<TEntity> Get<TEntity>() where TEntity : class;
 
         void Save();
+
+        void UpdateEntity<TEntity>(TEntity entity);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Common.Core.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Workflow.Sql.database
 {
@@ -9,9 +10,12 @@ namespace Workflow.Sql.database
     {
         private readonly IWorkflowDbContext _context;
 
-        public DiscountRepository(IWorkflowDbContext context)
+        public DiscountRepository(IServiceScopeFactory serviceScopeFactory)
         {
-            _context = context;
+            _context = serviceScopeFactory
+                .CreateScope()
+                .ServiceProvider
+                .GetRequiredService<IWorkflowDbContext>();
         }
 
         public DiscountEntity Load(string id)

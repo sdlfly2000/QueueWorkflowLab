@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mis", "Mis", "{E41CC79B-8F1
 	ProjectSection(SolutionItems) = preProject
 		Create_Table_Discount.sql = Create_Table_Discount.sql
 		Create_Table_DiscountObtained.sql = Create_Table_DiscountObtained.sql
+		InitializeDiscount.sql = InitializeDiscount.sql
 	EndProjectSection
 EndProject
 Global

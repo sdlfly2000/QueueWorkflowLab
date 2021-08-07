@@ -16,18 +16,18 @@ namespace Workflow.Services.DiscountWorkflow
         }
 
         public void Execute(GetDiscountWorkflowContext context)
-        {
-            var option = new TransactionOptions
-            {
-                IsolationLevel = IsolationLevel.ReadCommitted
-            };
-
+        { 
             if (string.IsNullOrEmpty(context.DiscountId))
             {
                 return;
             }
 
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, option))
+            var option = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.ReadUncommitted
+            };
+
+            using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, option))
             {
                 _uow.Add(new DiscountObtainedEntity
                 {

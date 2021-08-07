@@ -4,7 +4,7 @@ using System;
 
 namespace Workflow.Sql.database
 {
-    [ServiceLocate(typeof(IUnitOfWork), ServiceType.Singleton)]
+    [ServiceLocate(typeof(IUnitOfWork), ServiceType.Scoped)]
     public class WorkflowUnitOfWork : IUnitOfWork
     {
         private readonly IDiscountRepository _discountRepository;

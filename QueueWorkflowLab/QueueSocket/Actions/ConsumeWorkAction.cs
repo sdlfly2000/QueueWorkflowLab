@@ -8,6 +8,8 @@ namespace QueueSocket.Actions
     [ServiceLocate(typeof(IConsumeWorkAction))]
     public class ConsumeWorkAction : IConsumeWorkAction
     {
+        private static object _sync = new object();
+
         private readonly ILogger<ConsumeWorkAction> _logger;
         private readonly IQueueService<GetDiscountWorkflowRequest> _queueService;
         private readonly IWorkflowService _workflowService;
@@ -30,11 +32,14 @@ namespace QueueSocket.Actions
 
                 if (workContext != default(GetDiscountWorkflowRequest))
                 {
-                    _workflowService.CreateGetDiscountWorkflow(new GetDiscountWorkflowRequest
+                    lock (_sync)
                     {
-                        WorkName = workContext.WorkName
-                    });
-                    _logger.LogInformation($"Consumed {workContext.WorkName}, Total Count in Queue: {_queueService.Queue.Count}");
+                        _workflowService.CreateGetDiscountWorkflow(new GetDiscountWorkflowRequest
+                        {
+                            WorkName = workContext.WorkName
+                        });
+                        _logger.LogInformation($"Consumed {workContext.WorkName}, Total Count in Queue: {_queueService.Queue.Count}");
+                    }
                 }
             }
         }

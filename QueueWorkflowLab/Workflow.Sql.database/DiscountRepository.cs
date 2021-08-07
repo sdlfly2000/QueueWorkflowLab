@@ -1,21 +1,15 @@
 ﻿using System.Linq;
-using Common.Core.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Workflow.Sql.database
 {
-    [ServiceLocate(typeof(IDiscountRepository))]
     public class DiscountRepository : IDiscountRepository
     {
         private readonly IWorkflowDbContext _context;
 
-        public DiscountRepository(IServiceScopeFactory serviceScopeFactory)
+        public DiscountRepository(IWorkflowDbContext context)
         {
-            _context = serviceScopeFactory
-                .CreateScope()
-                .ServiceProvider
-                .GetRequiredService<IWorkflowDbContext>();
+            _context = context;
         }
 
         public DiscountEntity Load(string id)

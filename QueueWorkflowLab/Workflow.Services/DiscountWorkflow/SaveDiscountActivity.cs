@@ -8,11 +8,11 @@ namespace Workflow.Services.DiscountWorkflow
     [ServiceLocate(typeof(ISaveDiscountActivity))]
     public class SaveDiscountActivity : ISaveDiscountActivity
     {
-        private readonly IDiscountObtainedRepository _discountObtainedRepository;
+        private readonly IUnitOfWork _uow;
 
-        public SaveDiscountActivity(IDiscountObtainedRepository discountObtainedRepository)
+        public SaveDiscountActivity(IUnitOfWork uow)
         {
-            _discountObtainedRepository = discountObtainedRepository;
+            _uow = uow;
         }
 
         public void Execute(GetDiscountWorkflowContext context)
@@ -29,7 +29,7 @@ namespace Workflow.Services.DiscountWorkflow
 
             using (var scope = new TransactionScope(TransactionScopeOption.Required, option))
             {
-                _discountObtainedRepository.Add(new DiscountObtainedEntity
+                _uow.Add(new DiscountObtainedEntity
                 {
                     Id = Guid.NewGuid().ToString(),
                     WorkflowName = context.Name,

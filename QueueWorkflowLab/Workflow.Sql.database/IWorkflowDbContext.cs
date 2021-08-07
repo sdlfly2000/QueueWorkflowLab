@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Workflow.Sql.database
 {
-    public interface IWorkflowDbContext
+    public interface IWorkflowDbContext : IDisposable
     {
         DbSet<TEntity> Get<TEntity>() where TEntity : class;
 

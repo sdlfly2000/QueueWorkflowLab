@@ -1,20 +1,12 @@
-﻿using Common.Core.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-
-namespace Workflow.Sql.database
+﻿namespace Workflow.Sql.database
 {
-    [ServiceLocate(typeof(IDiscountObtainedRepository))]
     public class DiscountObtainedRepository : IDiscountObtainedRepository
     {
         private readonly IWorkflowDbContext _context;
 
-        public DiscountObtainedRepository(IServiceScopeFactory serviceScopeFactory)
+        public DiscountObtainedRepository(IWorkflowDbContext context)
         {
-            _context = serviceScopeFactory
-                .CreateScope()
-                .ServiceProvider
-                .GetRequiredService<IWorkflowDbContext>();
+            _context = context;
         }
 
         public void Add(DiscountObtainedEntity entity)

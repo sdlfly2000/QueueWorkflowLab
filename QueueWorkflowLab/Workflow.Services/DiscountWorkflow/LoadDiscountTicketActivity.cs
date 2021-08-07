@@ -6,16 +6,16 @@ namespace Workflow.Services.DiscountWorkflow
     [ServiceLocate(typeof(ILoadDiscountTicketActivity))]
     public class LoadDiscountTicketActivity : ILoadDiscountTicketActivity
     {
-        private readonly IDiscountRepository _discountRepository;
+        private readonly IUnitOfWork _uow;
 
-        public LoadDiscountTicketActivity(IDiscountRepository discountRepository)
+        public LoadDiscountTicketActivity(IUnitOfWork uow)
         {
-            _discountRepository = discountRepository;
+            _uow = uow;
         }
 
         public void Execute(GetDiscountWorkflowContext context)
         {
-            var discount = _discountRepository.LoadAvailable();
+            var discount = _uow.LoadAvailable();
             context.DiscountId = discount != null 
                 ? discount.Id 
                 : string.Empty;

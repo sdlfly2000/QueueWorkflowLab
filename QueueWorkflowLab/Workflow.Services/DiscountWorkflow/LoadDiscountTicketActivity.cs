@@ -16,7 +16,9 @@ namespace Workflow.Services.DiscountWorkflow
         public void Execute(GetDiscountWorkflowContext context)
         {
             var discount = _discountRepository.LoadAvailable();
-            context.DiscountId = discount.Id;
+            context.DiscountId = discount != null 
+                ? discount.Id 
+                : string.Empty;
         }
     }
 }

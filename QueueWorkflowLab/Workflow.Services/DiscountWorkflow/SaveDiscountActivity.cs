@@ -22,7 +22,12 @@ namespace Workflow.Services.DiscountWorkflow
                 IsolationLevel = IsolationLevel.ReadCommitted
             };
 
-            using (var scope = new TransactionScope(TransactionScopeOption.Required, option)) 
+            if (string.IsNullOrEmpty(context.DiscountId))
+            {
+                return;
+            }
+
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, option))
             {
                 _discountObtainedRepository.Add(new DiscountObtainedEntity
                 {

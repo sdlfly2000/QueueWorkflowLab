@@ -1,22 +1,19 @@
 ﻿using Common.Core.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 
 namespace Workflow.Sql.database
 {
-    [ServiceLocate(typeof(IUnitOfWork), ServiceType.Scoped)]
+    [ServiceLocate(typeof(IUnitOfWork), ServiceType.Transient)]
     public class WorkflowUnitOfWork : IUnitOfWork
     {
         private readonly IDiscountRepository _discountRepository;
         private readonly IDiscountObtainedRepository _discountObtainedRepository;
         private readonly IWorkflowDbContext _context;
 
-        public WorkflowUnitOfWork(IServiceScopeFactory serviceScopeFactory)
+        public WorkflowUnitOfWork(DbContextPool<WorkflowDbContext> contextPool)
         {
-            _context = serviceScopeFactory
-                .CreateScope()
-                .ServiceProvider
-                .GetRequiredService<IWorkflowDbContext>();
+            _context = contextPool.Rent();
 
             Console.WriteLine($"Create Instance id: {_context.GetHashCode()}");
 

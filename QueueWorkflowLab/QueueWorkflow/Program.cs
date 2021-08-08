@@ -23,7 +23,7 @@ namespace QueueWorkflow
                                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                                 .Build();
 
-                    services.AddDbContext<WorkflowDbContext>(
+                    services.AddDbContextPool<WorkflowDbContext>(
                         options => options.UseMySql(
                             config.GetSection("ConnectionStrings")["WorkflowDatabase"]));
 
